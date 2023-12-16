@@ -14,20 +14,25 @@ import org.powermock.modules.junit4.PowerMockRunner;
 public class UserDAOTest {
 
     @Test
-    public void testCreateUser_Should_Return_User_With_Unique_Id(){
-        PowerMockito.mockStatic(IdGeneratorUtil.class);
+    public void testCreateUser_Should_Return_User_With_Unique_Id() {
+        try {
+            PowerMockito.mockStatic(IdGeneratorUtil.class);
 
-        Integer generatedId = 112;
+            Integer expectedId = 112;
 
-        //Stubbing Expectation
-        PowerMockito.when(IdGeneratorUtil.generateId()).thenReturn(generatedId);
+            //Stubbing or mocking expectation
+            PowerMockito.when(IdGeneratorUtil.generateId()).thenReturn(expectedId);
 
-        UserDAO dao = new UserDAO();
-        User user = dao.create(new User("Rahul", "rk@outlook.com"));
-        System.out.println(user);
+            UserDAO dao = new UserDAO();
+            User user = dao.create(new User("Rahul", "rk@outlook.com"));
+            System.out.println(user);
 
-        PowerMockito.verifyStatic();
-        Assert.assertEquals(generatedId,user.getId());
+            //Verifying if stubbed static methods are really getting called
+            PowerMockito.verifyStatic();
+            Assert.assertEquals(expectedId, user.getId());
+        } catch (Exception e) {
+            Assert.fail("Unit test failed :: " + e.getMessage());
+        }
     }
 
 }
